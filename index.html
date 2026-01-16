@@ -68,7 +68,7 @@
 
     <div class="top-row">
         <div class="tile weather-tile">
-            <p class="city-name">Eldoret 🇰🇪</p>
+            <p class="city-name">Studio 🇰🇪</p>
             <div style="display:flex; gap:10px; margin-top:10px;">
                 <div class="stat-circle">🌡️ <span id="temp">--°C</span></div>
                 <div class="stat-circle">🫧 <span id="hum">--%</span></div>
@@ -85,11 +85,11 @@
                 <span id="q-text">Vibes loading...</span>
             </div>
         </div>
-        <div style="text-align:right; z-index:2; position:relative; font-weight:bold; font-family:serif;">⏳ Phesty</div>
+        <div style="text-align:right; z-index:2; position:relative; font-weight:bold; font-family:serif;">⏳ Phestone</div>
     </div>
 
     <div class="tile magic-tile">
-        <span id="magic-title" style="display:block; margin-bottom:12px; font-weight:bold; font-size:1.1rem;">Do u wanna know something? 😏</span>
+        <span id="magic-title" style="display:block; margin-bottom:12px; font-weight:bold; font-size:1.1rem;">Got a question? 😎</span>
         <input type="text" id="magic-input" class="magic-input" placeholder="Ask Phestone...">
         <div id="ai-status">Phestone is online.</div>
         <button id="magic-btn" class="magic-btn" onclick="handleMagic()">Ask</button>
@@ -106,15 +106,16 @@
 
     async function callAI(prompt) {
         const status = document.getElementById('ai-status');
-        status.innerText = "Phestone is cooking... 💭";
+        status.innerText = "Phestone is thinking... 💭";
         try {
             const response = await puter.ai.chat(
-                `Your name is Phestone. You are cool, witty, and humorous. 
-                Talk like a real person from Eldoret with diverse word choice. 
-                Do NOT over-use the words 'studio' or 'vibe'—keep it fresh and no cap. 
-                Be slightly savage but chill. Keep it under 20 words. 
-                If asked your name, you are Phestone. 
-                User says: ${prompt}`
+                `Your name is Phestone. You are cool and witty.
+                Answer this: "${prompt}".
+                CRITICAL RULES:
+                1. NEVER use the words 'studio', 'vibe', or 'Eldoret'. 
+                2. Use diverse vocabulary. No cap.
+                3. Be brief (max 15 words) and slightly savage. 
+                4. If asked your name, you are Phestone.`
             );
             status.innerText = response;
         } catch (error) {
@@ -134,58 +135,5 @@
                 if (!sName) return;
                 document.getElementById('magic-title').innerText = `What's on your mind, ${sName}?`;
                 input.value = ""; input.placeholder = "Write message...";
-                document.getElementById('magic-btn').innerText = "Send to Phestone";
-                waStep = 2;
-            } else {
-                window.open(`https://wa.me/254768946798?text=Yo Phestone, ${sName} says: ${input.value}`, '_blank');
-                document.getElementById('magic-title').innerText = "Vibe Sent! 🚀";
-            }
-        }
-    }
-
-    async function getWeather() {
-        try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=0.51&longitude=35.26&current=temperature_2m,relative_humidity_2m');
-            const data = await res.json();
-            document.getElementById('temp').innerText = Math.round(data.current.temperature_2m) + "°C";
-            document.getElementById('hum').innerText = data.current.relative_humidity_2m + "%";
-        } catch(e) { document.getElementById('temp').innerText = "22°C"; }
-    }
-
-    function updateUI() {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        document.getElementById('date-header').innerText = now.toLocaleDateString('en-US', {month:'long', day:'numeric'});
-        const d = now.getDate();
-        const s = (d%10==1&&d!=11)?'st':(d%10==2&&d!=12)?'nd':(d%10==3&&d!=13)?'rd':'th';
-        document.getElementById('q-date').innerText = `📌 ${now.toLocaleString('default',{month:'long'})} ${d}${s}, ${now.toLocaleString('default',{weekday:'long'})}`;
-    }
-
-    function toggleMusic() {
-        const a = document.getElementById('audio');
-        const m = document.querySelector('.music-section');
-        a.paused ? (a.play(), m.classList.add('playing')) : (a.pause(), m.classList.remove('playing'));
-    }
-
-    document.body.style.backgroundImage = `url('${backgrounds[Math.floor(Math.random()*backgrounds.length)]}')`;
-    document.getElementById('portrait-img').style.backgroundImage = `url('${portraits[Math.floor(Math.random()*portraits.length)]}')`;
+                document.getElementById('magic-btn
     
-    // DAILY QUOTE SYSTEM
-    const quotes = ["Your only limit is your mind.", "Energy flows where intention goes.", "Protect your peace.", "Legends never die.", "Stay original.", "Vibe high, stay low key.", "Studio hours are the best hours."];
-    const emojiRot = ["🧊","❄️","🫧","❤️","🍃","⚒️","✍️","🍂","😇","😅","🫶"];
-    const storedDate = localStorage.getItem('stud_d');
-    if(storedDate !== new Date().toDateString()){
-        localStorage.setItem('stud_d', new Date().toDateString());
-        localStorage.setItem('stud_q', quotes[Math.floor(Math.random()*quotes.length)]);
-        localStorage.setItem('stud_e', emojiRot[Math.floor(Math.random()*emojiRot.length)]);
-        localStorage.setItem('stud_i', backgrounds[Math.floor(Math.random()*backgrounds.length)]);
-    }
-    document.getElementById('q-text').innerText = localStorage.getItem('stud_q');
-    document.getElementById('q-emoji').innerText = localStorage.getItem('stud_e');
-    document.getElementById('quote-card').style.backgroundImage = `url('${localStorage.getItem('stud_i')}')`;
-
-    getWeather(); updateUI(); setInterval(updateUI, 1000);
-</script>
-</body>
-        </html>
-        
